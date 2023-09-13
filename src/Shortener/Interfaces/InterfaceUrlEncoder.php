@@ -1,13 +1,14 @@
 <?php
-namespace App\Interfaces;
+
+namespace App\Shortener\Interfaces;
 
 interface InterfaceUrlEncoder
 {
 
     /**
      * @param string $url
-     * @throws \InvalidArgumentException
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function encode(string $url): string;
 }

@@ -1,5 +1,6 @@
 <?php
-namespace App\Interfaces;
+
+namespace App\Shortener\Interfaces;
 
 interface InterfaceUrlValidator
 {
