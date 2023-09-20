@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Shortener\Models;
+namespace App\Shortener\Service;
 
 use App\Shortener\Interfaces\InterfaceUrlEncoder;
 use App\Shortener\Interfaces\InterfaceUrlDecoder;
-use App\Shortener\Models\Repository\FileRepository;
+use App\Shortener\Repository\FileRepository;
 use App\Shortener\Helpers\Validation\UrlValidator;
-use App\Shortener\Exceptions\ExceptionHandler;
+use Exception;
+use InvalidArgumentException;
 
 class UrlConverter implements InterfaceUrlDecoder, InterfaceUrlEncoder
 {
@@ -61,18 +62,16 @@ class UrlConverter implements InterfaceUrlDecoder, InterfaceUrlEncoder
         if (http_response_code() === 200) {
             if ($this->fileRepository->checkUrlFile($url)) {
                 $code = $this->codingUrl($url);
-                try {
-                    if ($this->fileRepository->saveAll($code, $url)) {
-                        return $code;
-                    } else {
-                        throw new ExceptionHandler("Код и URL не были сохранены.");
-                    }
-                } catch (ExceptionHandler $e) {
-                    die ($e->getMessage());
+                if ($this->fileRepository->saveAll($code, $url)) {
+                    return $code;
+                } else {
+                    throw new Exception("Код и URL не были сохранены - ");
                 }
             } else {
                 return $this->fileRepository->getCode($url);
             }
+        } elseif (http_response_code() === 400) {
+            throw new InvalidArgumentException("URL не существует или недоступен - ");
         }
     }
 

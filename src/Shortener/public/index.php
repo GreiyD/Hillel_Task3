@@ -1,8 +1,8 @@
 <?php
 
 use App\Shortener\Helpers\Validation\UrlValidator;
-use App\Shortener\Models\UrlConverter;
-use App\Shortener\Models\Repository\FileRepository;
+use App\Shortener\Service\UrlConverter;
+use App\Shortener\Repository\FileRepository;
 
 require_once __DIR__ . '/../autoload.php';
 

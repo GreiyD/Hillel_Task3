@@ -3,8 +3,7 @@
 namespace App\Shortener\Helpers\Validation;
 
 use App\Shortener\Interfaces\InterfaceUrlValidator;
-use App\Shortener\Exceptions\ExceptionHandler;
-
+use InvalidArgumentException;
 
 class UrlValidator implements InterfaceUrlValidator
 {
@@ -13,16 +12,12 @@ class UrlValidator implements InterfaceUrlValidator
      * @param string $url
      * @return string
      */
-    public function validation(string $url): string
+    public function validation(string $url): int
     {
-        try {
-            if (file_get_contents($url) && filter_var($url, FILTER_VALIDATE_URL)) {
-                return http_response_code(200);
-            } else {
-                throw new ExceptionHandler("URL не существует или недоступен.");
-            }
-        } catch (ExceptionHandler $e) {
-            die ($e->getMessage());
+        if (file_get_contents($url) && filter_var($url, FILTER_VALIDATE_URL)) {
+            return http_response_code(200);
+        } else {
+            return http_response_code(400);
         }
     }
 }

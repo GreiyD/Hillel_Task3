@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shortener\Models\Repository;
+namespace App\Shortener\Repository;
 
 use App\Shortener\Interfaces\InterfaceFileRepository;
-use App\Shortener\Exceptions\ExceptionHandler;
+use InvalidArgumentException;
 
 class FileRepository implements InterfaceFileRepository
 {
@@ -47,18 +47,14 @@ class FileRepository implements InterfaceFileRepository
     {
         $fileName = $this->getFileName();
         $lines = file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        try {
-            foreach ($lines as $line) {
-                $parts = explode('  |  ', $line);
-                if (count($parts) === 2 && trim($parts[0]) === $code) {
-                    $url = trim($parts[1]);
-                    return $url;
-                }
+        foreach ($lines as $line) {
+            $parts = explode('  |  ', $line);
+            if (count($parts) === 2 && trim($parts[0]) === $code) {
+                $url = trim($parts[1]);
+                return $url;
             }
-            throw new ExceptionHandler("Не удалось разкодировать.");
-        } catch (ExceptionHandler $e) {
-            die ($e->getMessage());
         }
+        throw new InvalidArgumentException("Не удалось разкодировать, такого Url в базе данных не существует - ");
     }
 
     /**
@@ -96,3 +92,4 @@ class FileRepository implements InterfaceFileRepository
     }
 
 }
+
