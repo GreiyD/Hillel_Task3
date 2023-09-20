@@ -3,7 +3,6 @@
 namespace App\Shortener\Helpers\Validation;
 
 use App\Shortener\Interfaces\InterfaceUrlValidator;
-use InvalidArgumentException;
 
 class UrlValidator implements InterfaceUrlValidator
 {
